@@ -31,16 +31,16 @@ public class BasePage {
         maximizeBrowserWindow();
     }
 
-    public static void navigateToMainUrl(String url) {
+    private static void navigateToMainUrl(String url) {
         open(url);
         System.out.println("Starting Page URL: " + url);
     }
 
-    public static void maximizeBrowserWindow() {
+    private static void maximizeBrowserWindow() {
         Selenide.webdriver().driver().getWebDriver().manage().window().maximize();
     }
 
-    public static void waitForPageToLoad(long timeOutInSeconds) {
+    protected static void waitForPageToLoad(long timeOutInSeconds) {
         try {
             Selenide.Wait().until(webDriver ->
                                           ((JavascriptExecutor) webDriver).executeScript("return document.readyState")
