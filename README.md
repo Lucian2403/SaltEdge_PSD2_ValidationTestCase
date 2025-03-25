@@ -1,7 +1,7 @@
-🛒 Amazon Shopping Cart Automation
+🛒 SaltEdge PSD2 Compliance Validator
 ==================================
 
-This project automates adding the cheapest (in our case) Snickers and Skittles to your Amazon cart, verifies that prices are correct, and checks if you're redirected to the signup page at checkout. It is built using **Selenium WebDriver** and **Cucumber** to ensure easy-to-read test scenarios.
+This project automates validation of SaltEdge's Berlin Group API documentation, verifying correct header types and response structures. Built with Selenium WebDriver and Cucumber, it ensures regulatory compliance through readable test scenarios.
 
 🚀 Features
 -----------
