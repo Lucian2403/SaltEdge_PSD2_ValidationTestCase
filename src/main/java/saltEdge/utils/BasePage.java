@@ -12,13 +12,17 @@ import static org.testng.Assert.assertEquals;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import io.cucumber.java.After;
 import io.cucumber.java.BeforeAll;
+import io.cucumber.java.Scenario;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.OutputType;
 
 public class BasePage {
 
@@ -76,19 +80,6 @@ public class BasePage {
         }
     }
 
-    public void smartSetValue(SelenideElement target, String stringValue) {
-        try {
-            target.should(Condition.exist)
-                    .shouldBe(interactable);
-            target.setValue(stringValue);
-        } catch (Exception | Error e) {
-            System.out.println("Failed to write on " + target.toString());
-            System.out.println(e.getMessage());
-            executeJavaScript("arguments[0].value='{}'", stringValue, $(target));
-        }
-
-    }
-
     public static void clickWithJS(SelenideElement element) {
         executeJavaScript("arguments[0].click();", element);
     }
@@ -106,6 +97,20 @@ public class BasePage {
         System.out.println(colorize("Assertion text: Expected = '" + expectedText + "', Actual = '" + actual + "'",
                                     ITALIC()));
         assertEquals(actual, expectedText);
+    }
+
+    public class Hooks {
+        @After
+        public void afterScenario(Scenario scenario) {
+            // Capture screenshot for ALL scenarios (passed/failed)
+            byte[] screenshot = Selenide.screenshot(OutputType.BYTES);
+            scenario.attach(screenshot, "image/png", scenario.getName());
+
+            if (scenario.isFailed()) {
+                byte[] failureScreenshot = Objects.requireNonNull(Selenide.screenshot("FAILED_" + scenario.getName())).getBytes();
+                scenario.attach(failureScreenshot, "image/png", "FAILED_" + scenario.getName());
+            }
+        }
     }
 
 }
